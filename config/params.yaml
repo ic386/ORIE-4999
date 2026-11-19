@@ -1,0 +1,45 @@
+years: [2019, 2020, 2021, 2022, 2023, 2024, 2025]   # usable window per Ryan
+
+h3:
+  public_res: 8          # ~0.74 km2, neighborhood scale - public maps
+  analysis_res: 9        # ~0.11 km2, a few blocks - analysis
+  sensitivity_res: [7, 8, 9, 10]
+
+geo:
+  state_plane_crs: "EPSG:3452"   # NAD83 / Louisiana South (ftUS) - CFS mapx/mapy
+  area_crs: "EPSG:26915"         # UTM 15N, metres - for area/overlay math
+  # Orleans Parish bounding box (generous); points outside are dropped
+  bbox: {min_lat: 29.85, max_lat: 30.20, min_lon: -90.15, max_lon: -89.60}
+
+service_311:
+  # Date Created before this is a migration artifact (tens of thousands share Jan 1-2, 2019 stamps)
+  reliable_created_from: "2019-01-03"
+  duplicate_status: ["Duplicate Request", "Duplicate Case"]
+  invalid_status: ["Invalid Request", "Invalid Case", "Test"]
+  # Neighborhood-condition flags (regex, case-insensitive, matched on type + reason)
+  conditions:
+    streetlight: "street ?light"
+    illegal_dumping: "illegal dumping"
+    blight: "property maintenance|blight|overgrown|abandoned (?:house|structure|building|property)|junk"
+
+cfs:
+  # NOPD beat format looks like <district digit><zone letter><subzone digits>, e.g. 7L03 - verify
+  beat_regex: "^(?P<district>\\d)(?P<zone>[A-Z])(?P<subzone>\\d+)$"
+
+population:
+  acs_year: 2023                 # ACS 5-year vintage
+  acs_variable: B01003_001E      # total population
+  state_fips: "22"
+  county_fips: "071"             # Orleans Parish
+  min_pop_per_hex: 50            # hexes below this get NaN per-capita rates
+
+funnel:
+  eb_min_trials: 1
+
+dedup:
+  window_hours: [1, 6, 24, 72, 168]
+  ring_k: [0, 1, 2]
+  match_on: request_reason        # or request_type
+
+temporal:
+  tod_buckets: {overnight: [0, 6], morning: [6, 12], afternoon: [12, 18], evening: [18, 24]}

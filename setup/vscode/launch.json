@@ -1,0 +1,44 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Pipeline: pick a step",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "nola.pipeline",
+      "args": ["${input:step}"],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Pipeline: sample fetch (20k rows/table)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "nola.pipeline",
+      "args": ["fetch", "--sample", "20000"],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Current file",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "step",
+      "type": "pickString",
+      "description": "Pipeline step",
+      "options": ["fetch", "dictionary", "clean", "join", "qa", "h3", "calendar", "tables",
+                  "population", "temporal", "map", "dedup", "all"],
+      "default": "qa"
+    }
+  ]
+}

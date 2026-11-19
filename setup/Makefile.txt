@@ -1,0 +1,62 @@
+PY := .venv/bin/python
+RUN := $(PY) -m nola.pipeline
+
+.PHONY: setup sample fetch dictionary clean-data join qa h3 calendar tables population temporal map sample-map dedup all test lint
+
+setup:            ## create venv and install the package in editable mode
+	python3 -m venv .venv
+	$(PY) -m pip install -U pip
+	$(PY) -m pip install -r requirements.txt
+	$(PY) -m pip install -e .
+	@test -f .env || cp .env.example .env
+
+sample:           ## quick dev pull: 20k rows per table
+	$(RUN) fetch --sample 20000
+
+fetch:            ## full pull from data.nola.gov
+	$(RUN) fetch
+
+dictionary:       ## data-dictionary review + schema drift tables
+	$(RUN) dictionary
+
+clean-data:
+	$(RUN) clean
+
+join:             ## CFS-EPR join + match-rate report
+	$(RUN) join
+
+qa:               ## code stability by year, disposition checks, crosswalk review
+	$(RUN) qa
+
+h3:
+	$(RUN) h3
+
+calendar:
+	$(RUN) calendar
+
+tables:
+	$(RUN) tables
+
+population:
+	$(RUN) population
+
+temporal:
+	$(RUN) temporal
+
+map:
+	$(RUN) map
+
+sample-map:       ## map prototype on synthetic hex data (no download needed)
+	$(RUN) map --sample
+
+dedup:
+	$(RUN) dedup
+
+all:
+	$(RUN) all
+
+test:
+	$(PY) -m pytest -q
+
+lint:
+	$(PY) -m ruff check src tests notebooks

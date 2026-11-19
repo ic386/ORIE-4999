@@ -1,0 +1,29 @@
+# Data is pulled from the Socrata API - never commit it
+data/raw/
+data/interim/
+data/processed/
+data/external/*
+!data/external/.gitkeep
+*.csv
+!config/*.csv
+*.parquet
+*.zip
+*.geojson
+*.shp
+
+# Generated outputs (keep folders, not files)
+outputs/**/*
+!outputs/**/.gitkeep
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Secrets & OS
+.env
+.DS_Store

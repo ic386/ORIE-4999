@@ -1,0 +1,54 @@
+# Socrata dataset IDs on data.nola.gov (verified against catalog.data.gov, Nov 2026).
+# Pull with: python -m nola.pipeline fetch
+domain: data.nola.gov
+
+calls_for_service:      # NOPD Calls for Service, one table per year (incident-level, block-masked)
+  2019: qf6q-pp4b
+  2020: hp7u-i9hf
+  2021: 3pha-hum9
+  2022: nci8-thrr
+  2023: pc5d-tvaw
+  2024: 2zcj-b6ts
+  2025: 4xwx-sfte
+
+epr:                    # Electronic Police Reports, one table per year (one row per charge/offender/victim)
+  2019: mm32-zkg7
+  2020: hjbe-qzaz
+  2021: 6pqh-bfxa
+  2022: 9wdb-bznc
+  2023: j3gz-62a2
+  2024: c5iy-ew8n
+  2025: agqi-9adb
+
+service_311:            # 311 OPCD Calls (2012-Present), single table, ~1.04M rows
+  all: 2jgv-pqrq
+
+# Columns to request (SoQL $select). null = all columns.
+select:
+  calls_for_service: null
+  epr: null
+  service_311:
+    - service_request
+    - request_type
+    - request_reason
+    - date_created
+    - date_modified
+    - case_close_date
+    - request_status
+    - status
+    - responsible_agency
+    - final_address
+    - address_councildis
+    - latitude
+    - longitude
+
+# Socrata computed-region columns -> readable names (present in CFS and 311)
+computed_regions:
+  ":@computed_region_ewbu_t8bu": region_block
+  ":@computed_region_k37d_then": region_council_district
+  ":@computed_region_m56f_hbma": region_srno
+  ":@computed_region_7fw3_kdpf": region_nsa
+  ":@computed_region_spev_d8jm": region_zip
+  ":@computed_region_sikx_bdeb": region_neighborhood_org
+  ":@computed_region_evki_aju8": region_police_district
+  ":@computed_region_u4yh_3wk9": region_census_2010

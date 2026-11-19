@@ -1,0 +1,44 @@
+# Holiday & event calendar inputs. Built by: python -m nola.pipeline calendar
+# Rule-based events are approximations - VERIFY each year against official schedules
+# (mardigrasneworleans.com, nojazzfest.com, WWOZ "In the Street" for second lines).
+
+carnival:
+  # Day offsets relative to Fat Tuesday (0). Ryan: Wed/Thu/Fri/Mon nights before, both weekends
+  # before, and large parades ~4 weeks out follow a fixed pattern relative to Mardi Gras.
+  parade_offsets_days: [-24, -23, -17, -16, -12, -11, -10, -9, -6, -5, -4, -3, -2, -1, 0]
+  season_start: {month: 1, day: 6}          # Twelfth Night
+  parades_cancelled_years: [2021]
+
+fixed:                                       # same month/day every year
+  - {name: new_years_day, month: 1, day: 1}
+  - {name: july_4, month: 7, day: 4}
+  - {name: halloween, month: 10, day: 31}
+  - {name: new_years_eve, month: 12, day: 31}
+
+rules:                                       # computed in nola/events.py
+  jazz_fest: {cancelled_years: [2020, 2021]}          # last Fri of April wknd + following Thu-Sun
+  essence_fest: {cancelled_years: [2020, 2021]}       # Fri-Sun, latest Friday on/before Jul 5
+  southern_decadence: {cancelled_years: [2020]}       # Thu-Mon of Labor Day weekend
+  bayou_classic: {cancelled_years: [2020]}            # Saturday after Thanksgiving
+
+explicit:                                    # exact dates; kind = event | confounder
+  - {name: sugar_bowl, start: 2019-01-01, kind: event}
+  - {name: sugar_bowl, start: 2020-01-01, kind: event}
+  - {name: sugar_bowl, start: 2021-01-01, kind: event}
+  - {name: sugar_bowl, start: 2022-01-01, kind: event}
+  - {name: sugar_bowl, start: 2022-12-31, kind: event}
+  - {name: sugar_bowl, start: 2024-01-01, kind: event}
+  - {name: sugar_bowl, start: 2025-01-02, kind: event}   # postponed after Jan 1 attack
+  - {name: sugar_bowl, start: 2026-01-01, kind: event}
+  - {name: super_bowl_lix, start: 2025-02-03, end: 2025-02-09, kind: event}
+  - {name: hurricane_barry, start: 2019-07-12, end: 2019-07-14, kind: confounder}
+  - {name: covid_stay_home, start: 2020-03-20, end: 2020-05-15, kind: confounder}
+  - {name: hurricane_zeta, start: 2020-10-28, end: 2020-10-31, kind: confounder}
+  - {name: hurricane_ida, start: 2021-08-29, end: 2021-09-12, kind: confounder}
+  - {name: hurricane_francine, start: 2024-09-11, end: 2024-09-13, kind: confounder}
+  - {name: bourbon_st_attack, start: 2025-01-01, kind: confounder}
+
+# Optional external lists (columns: date, name[, lat, lon]); skipped if missing
+external:
+  second_lines: data/external/second_lines.csv          # from WWOZ In the Street
+  special_events: data/external/special_event_permits.csv

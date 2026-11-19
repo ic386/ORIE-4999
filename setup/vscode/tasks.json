@@ -1,0 +1,10 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Setup venv", "type": "shell", "command": "make setup", "problemMatcher": [] },
+    { "label": "Sample fetch", "type": "shell", "command": "make sample", "problemMatcher": [] },
+    { "label": "Run full pipeline", "type": "shell", "command": "make all", "problemMatcher": [] },
+    { "label": "Map prototype (synthetic)", "type": "shell", "command": "make sample-map", "problemMatcher": [] },
+    { "label": "Tests", "type": "shell", "command": "make test", "group": { "kind": "test", "isDefault": true }, "problemMatcher": [] }
+  ]
+}

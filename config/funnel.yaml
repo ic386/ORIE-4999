@@ -1,0 +1,29 @@
+# Funnel-stage definitions: call -> confirmed incident -> filed report.
+# DRAFT - finalize with Ryan after running `python -m nola.pipeline qa`.
+# CFS disposition codes seen in 2024: NAT, RTF, GOA, VOI, DUP, REF, CBC, UNF, TRN, TST, EAD, SBC.
+
+dispositions:
+  confirmed:   [RTF, NAT]          # report to follow / necessary action taken
+  unconfirmed: [GOA, UNF, CBC]     # gone on arrival / unfounded / canceled by complainant
+  excluded:    [VOI, DUP, TST]     # void / duplicate item / test - dropped from the funnel
+  other:       [REF, TRN, EAD, SBC, LEAD]   # referrals & diversions - kept, own bucket
+
+report:
+  # A call counts as "reported" if its item number appears in EPR with an incident report.
+  epr_report_types: ["Incident Report"]
+  rtf_as_proxy: true               # also compute disposition == RTF as a proxy stage
+
+# Call-type crosswalk: first regex match on type_text wins (order matters).
+# Exact overrides live in config/call_type_crosswalk.csv.
+categories:
+  - {name: shooting,       report_expected: true,  pattern: "BY SHOOTING"}
+  - {name: shots_fired,    report_expected: false, pattern: "DISCHARG.*FIREARM|SHOTS? FIRED"}
+  - {name: domestic,       report_expected: true,  pattern: "DOMESTIC"}
+  - {name: violent,        report_expected: true,  pattern: "HOMICIDE|ROBBERY|AGGRAVATED (ASSAULT|BATTERY)|SIMPLE (ASSAULT|BATTERY)|RAPE|SEXUAL|CARJACK|KIDNAP|EXTORTION"}
+  - {name: property,       report_expected: true,  pattern: "BURGLARY|THEFT|SHOPLIFT|CRIMINAL DAMAGE|STOLEN|FRAUD"}
+  - {name: proactive,      report_expected: false, pattern: "AREA CHECK|BUSINESS CHECK|DIRECTED PATROL|WALKING BEAT|TRAFFIC STOP|SUBJECT STOP|FIELD INTERVIEW"}
+  - {name: alarm,          report_expected: false, pattern: "ALARM"}
+  - {name: traffic,        report_expected: false, pattern: "TRAFFIC|ACCIDENT|HIT & RUN|TOW|DWI|RECKLESS"}
+  - {name: medical_mental, report_expected: false, pattern: "MEDICAL|MENTAL|SUICID|OVERDOSE|DEATH"}
+  - {name: disturbance,    report_expected: false, pattern: "DISTURBANCE|NOISE|FIGHT|SUSPICIOUS|PROWLER|TRESPASS|DRUG|COMPLAINT"}
+  - {name: admin,          report_expected: false, pattern: "RETURN FOR ADDITIONAL|REQUESTED BY ANOTHER AGENCY|WARRANT|ESCORT|PRISONER|DETAIL"}

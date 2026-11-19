@@ -1,0 +1,5 @@
+type_text,category,report_expected,notes
+COMPLAINT OTHER,disturbance,false,largest single type; consider splitting with Ryan
+MISCELLANEOUS COMPLAINT,disturbance,false,
+EXTORTION (THREATS),violent,true,
+INCIDENT REQUESTED BY ANOTHER AGENCY,admin,false,
